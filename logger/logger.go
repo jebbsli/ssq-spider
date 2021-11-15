@@ -5,46 +5,37 @@ import (
 	"os"
 	"path/filepath"
 	"ssq-spider/configure"
+	"ssq-spider/utils"
 )
-
 
 var Logger *logrus.Logger
 
-func checkFileExist(filename string) bool {
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
-}
-
 func InitLogger() error {
-	var file *os.File
 	var err error
 
-	if !checkFileExist("log") {
-		if err := os.Mkdir("log", 0666); err != nil {
+	Logger = logrus.New()
+
+	logDir := filepath.Join(configure.RootDir, "log")
+
+	if !utils.CheckFileExist(logDir) {
+		if err := os.Mkdir(logDir, 0666); err != nil {
 			panic("os.Mkdir error: " + err.Error())
 		}
 	}
 
-	filePath := filepath.Join("log", configure.GlobalConfig.Log.Filename)
-	if !checkFileExist(filePath) {
-		file, err = os.Create(filePath)
+	filePath := filepath.Join(logDir, configure.GlobalConfig.Log.Filename)
+	if !utils.CheckFileExist(filePath) {
+		file, err := os.Create(filePath)
 		if err != nil {
 			panic("os.Create file error: " + err.Error())
 		}
-	} else {
-		file, err = os.Open(filePath)
-		if err != nil {
-			panic("os.Open file error: " + err.Error())
-		}
+		_ = file.Close()
 	}
 
-	Logger = logrus.New()
-	Logger.Out = file
-
-	Logger.Info("Init log success ...")
+	Logger.Out, err = os.OpenFile(filePath, os.O_RDWR|os.O_APPEND, 0666)
+	if err != nil {
+		panic("os.Open file error: " + err.Error())
+	}
 
 	return nil
 }

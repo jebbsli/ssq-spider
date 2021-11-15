@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	configDir = "etc"
+	configDir         = "etc"
 	ssqConfigFilename = "ssq.yaml"
 )
 
@@ -32,8 +32,8 @@ type MysqlConfig struct {
 type LocalConfigYaml struct {
 	Reload bool
 	Server ServerConfig `yaml:"server"`
-	Log LogConfig `yaml:"log"`
-	Mysql MysqlConfig `yaml:"mysql"`
+	Log    LogConfig    `yaml:"log"`
+	Mysql  MysqlConfig  `yaml:"mysql"`
 }
 
 // GlobalConfig 全局配置
@@ -43,7 +43,7 @@ var RootDir string
 
 // 加载配置
 func loadConfig() {
-	file, err := os.Open(path.Join(configDir, ssqConfigFilename))
+	file, err := os.Open(path.Join(RootDir, configDir, ssqConfigFilename))
 	if err != nil {
 		panic("open config file error:" + err.Error())
 	}
