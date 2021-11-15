@@ -1,0 +1,8 @@
+server:
+  port: 5623
+
+log:
+  filename: ssq.log
+
+mysql:
+  url: root:jason2039@tcp(120.26.11.194:3306)/ssqserver?loc=Local&parseTime=true
