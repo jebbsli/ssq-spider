@@ -1,5 +1,5 @@
 build:
-	go build -o ssqSpider main.go
+	go build -o ./bin/ssqSpider main.go
 
 clean:
 	rm -rf bin/
