@@ -97,6 +97,7 @@ func GetAllPage(maxIssueNum int) *[]SSQPageInfo {
 
 func ParseOnePage(page *SSQPageInfo) (string, string, error) {
 	pageContent := RequestPage(page.PageUrl)
+	logger.Logger.Debugf("page content: \n %s \n", pageContent)
 
 	var redBall []string
 	redBallMatches := RedBallRe.FindAllStringSubmatch(pageContent, -1)
